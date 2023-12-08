@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Post</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .post {
+            width: 80%;
+            max-width: 600px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .post-header {
+            background-color: #3498db;
+            color: #fff;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #297fb8;
+        }
+
+        .post-content {
+            padding: 20px;
+            min-height: 100px;
+            color: #333;
+        }
+
+        .post-buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 15px;
+            background-color: #f5f5f5;
+        }
+
+        .post button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .post button:hover {
+            background-color: #297fb8;
+        }
+
+        .post button.icon {
+            font-size: 16px;
+            margin-right: 5px;
+        }
+
+        .post input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        .post textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+            resize: none;
+        }
+
+        .post-comments {
+            border-top: 1px solid #ddd;
+            padding: 15px;
+            color: #555;
+        }
+
+        /* Reaction and Share Counters */
+        .counters {
+            text-align: center;
+            font-size: 14px;
+            margin-top: 10px;
+            color: #888;
+        }
+
+        /* Comment Styles */
+        .comment {
+            position: relative;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+        }
+
+        .comment-buttons {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .comment-button {
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+
+        .comment-button:hover {
+            background-color: #297fb8;
+        }
+    </style>
+</head>
+<body>
+    <div class="post">
+        <div class="post-header">
+            <h2>Social Media Post</h2>
+        </div>
+        <div class="post-content" contenteditable="true">
+            <p>This is the content of the social media post. Click here to edit.</p>
+        </div>
+        <div class="post-buttons">
+            <button onclick="likePost()" class="icon">👍 Like</button>
+            <button onclick="carePost()" class="icon">❤️ Care</button>
+            <button onclick="wowPost()" class="icon">😮 Wow</button>
+            <button onclick="angryPost()" class="icon">😡 Angry</button>
+            <button onclick="sadPost()" class="icon">😢 Sad</button>
+            <button onclick="commentPost()" class="icon">💬 Comment</button>
+            <button onclick="sharePost()" class="icon">↗️ Share</button>
+        </div>
+        <div class="post-comments" id="commentsSection">
+            <!-- Comments and reactions will appear here -->
+            <div id="reactionsCounter" class="counters">👍 0 | ❤️ 0 | 😮 0 | 😡 0 | 😢 0</div>
+            <div id="sharesCounter" class="counters">Shared on: 0 people</div>
+            <div id="commentsCounter" class="counters">Comments: 0</div>
+
+            <!-- Comment Section -->
+            <div id="comment1" class="comment">
+                <p>Sample Comment 1</p>
+                <div class="comment-buttons">
+                    <button class="comment-button" onclick="replyToComment('comment1')">Reply</button>
+                    <button class="comment-button" onclick="deleteComment('comment1')">Delete</button>
+                </div>
+            </div>
+
+            <div id="comment2" class="comment">
+                <p>Sample Comment 2</p>
+                <div class="comment-buttons">
+                    <button class="comment-button" onclick="replyToComment('comment2')">Reply</button>
+                    <button class="comment-button" onclick="deleteComment('comment2')">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let likesCount = 0;
+        let careCount = 0;
+        let wowCount = 0;
+        let angryCount = 0;
+        let sadCount = 0;
+        let sharesCount = 0;
+        let commentsCount = 0;
+
+        function likePost() {
+            likesCount++;
+            updateReactionsDisplay();
+        }
+
+        function carePost() {
+            careCount++;
+            updateReactionsDisplay();
+        }
+
+        function wowPost() {
+            wowCount++;
+            updateReactionsDisplay();
+        }
+
+        function angryPost() {
+            angryCount++;
+            updateReactionsDisplay();
+        }
+
+        function sadPost() {
+            sadCount++;
+            updateReactionsDisplay();
+        }
+
+        function commentPost() {
+            let comment = prompt('Enter your comment:');
+            if (comment) {
+                commentsCount++;
+                updateReactionsDisplay();
+                displayComment(comment);
+            }
+        }
+
+        function sharePost() {
+            let platform = prompt('Choose a platform to share the post: Facebook, Twitter, LinkedIn');
+            if (platform) {
+                sharesCount++;
+                updateSharesDisplay(platform);
+            }
+        }
+
+        function updateReactionsDisplay() {
+            const reactionsDisplay = document.getElementById('reactionsCounter');
+            reactionsDisplay.textContent = `👍 ${likesCount} | ❤️ ${careCount} | 😮 ${wowCount} | 😡 ${angryCount} | 😢 ${sadCount}`;
+        }
+
+        function updateSharesDisplay(platform) {
+            const sharesDisplay = document.getElementById('sharesCounter');
+            sharesDisplay.textContent = `Shared on: ${sharesCount} people`;
+        }
+
+        function displayComment(comment) {
+            const commentContainer = document.createElement('div');
+            commentContainer.id = `comment${commentsCount}`;
+            commentContainer.classList.add('comment');
+
+            const commentDisplay = document.createElement('p');
+            commentDisplay.textContent = comment;
+
+            const commentButtons = document.createElement('div');
+            commentButtons.classList.add('comment-buttons');
+
+            const replyButton = document.createElement('button');
+            replyButton.classList.add('comment-button');
+            replyButton.textContent = 'Reply';
+            replyButton.onclick = function () {
+                replyToComment(`comment${commentsCount}`);
+            };
+
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('comment-button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.onclick = function () {
+                deleteComment(`comment${commentsCount}`);
+            };
+
+            commentButtons.appendChild(replyButton);
+            commentButtons.appendChild(deleteButton);
+
+            commentContainer.appendChild(commentDisplay);
+            commentContainer.appendChild(commentButtons);
+
+            document.getElementById('commentsSection').appendChild(commentContainer);
+        }
+
+        function replyToComment(commentId) {
+            let reply = prompt('Enter your reply:');
+            if (reply) {
+                const replyContainer = document.createElement('div');
+                replyContainer.classList.add('comment');
+                replyContainer.style.marginLeft = '20px'; // Indent the reply
+
+                const replyDisplay = document.createElement('p');
+                replyDisplay.textContent = reply;
+
+                const replyButtons = document.createElement('div');
+                replyButtons.classList.add('comment-buttons');
+
+                const deleteButton = document.createElement('button');
+                deleteButton.classList.add('comment-button');
+                deleteButton.textContent = 'Delete';
+                deleteButton.onclick = function () {
+                    replyContainer.remove();
+                };
+
+                replyButtons.appendChild(deleteButton);
+
+                replyContainer.appendChild(replyDisplay);
+                replyContainer.appendChild(replyButtons);
+
+                const parentComment = document.getElementById(commentId);
+                parentComment.appendChild(replyContainer);
+            }
+        }
+
+        function deleteComment(commentId) {
+            const commentContainer = document.getElementById(commentId);
+            commentContainer.remove();
+        }
+    </script>
+</body>
+</html>
